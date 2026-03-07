@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		853AE8172F5BCE5D000F539A /* LaundryLoopNew Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 853AE8162F5BCE5D000F539A /* LaundryLoopNew Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		853AE8172F5BCE5D000F539A /* Laundry Loop Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 853AE8162F5BCE5D000F539A /* Laundry Loop Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		853AE9012F5BCF86000F539A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853AE9002F5BCF86000F539A /* WidgetKit.framework */; };
 		853AE9032F5BCF86000F539A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853AE9022F5BCF86000F539A /* SwiftUI.framework */; };
 		853AE90E2F5BCF86000F539A /* Laundry Loop WidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 853AE8FE2F5BCF86000F539A /* Laundry Loop WidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -19,21 +19,21 @@
 			containerPortal = 853AE80A2F5BCE5C000F539A /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 853AE8152F5BCE5D000F539A;
-			remoteInfo = "LaundryLoopNew Watch App";
+			remoteInfo = "Laundry Loop Watch App";
 		};
 		853AE8262F5BCE5E000F539A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 853AE80A2F5BCE5C000F539A /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 853AE8152F5BCE5D000F539A;
-			remoteInfo = "LaundryLoopNew Watch App";
+			remoteInfo = "Laundry Loop Watch App";
 		};
 		853AE8302F5BCE5E000F539A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 853AE80A2F5BCE5C000F539A /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 853AE8152F5BCE5D000F539A;
-			remoteInfo = "LaundryLoopNew Watch App";
+			remoteInfo = "Laundry Loop Watch App";
 		};
 		853AE90C2F5BCF86000F539A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -51,7 +51,7 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
-				853AE8172F5BCE5D000F539A /* LaundryLoopNew Watch App.app in Embed Watch Content */,
+				853AE8172F5BCE5D000F539A /* Laundry Loop Watch App.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -71,7 +71,7 @@
 
 /* Begin PBXFileReference section */
 		853AE8102F5BCE5D000F539A /* LaundryLoopNew.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LaundryLoopNew.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		853AE8162F5BCE5D000F539A /* LaundryLoopNew Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LaundryLoopNew Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		853AE8162F5BCE5D000F539A /* Laundry Loop Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Laundry Loop Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		853AE8252F5BCE5E000F539A /* LaundryLoopNew Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "LaundryLoopNew Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		853AE82F2F5BCE5E000F539A /* LaundryLoopNew Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "LaundryLoopNew Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		853AE8FE2F5BCF86000F539A /* Laundry Loop WidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Laundry Loop WidgetsExtension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -167,7 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				853AE8102F5BCE5D000F539A /* LaundryLoopNew.app */,
-				853AE8162F5BCE5D000F539A /* LaundryLoopNew Watch App.app */,
+				853AE8162F5BCE5D000F539A /* Laundry Loop Watch App.app */,
 				853AE8252F5BCE5E000F539A /* LaundryLoopNew Watch AppTests.xctest */,
 				853AE82F2F5BCE5E000F539A /* LaundryLoopNew Watch AppUITests.xctest */,
 				853AE8FE2F5BCF86000F539A /* Laundry Loop WidgetsExtension.appex */,
@@ -206,9 +206,9 @@
 			productReference = 853AE8102F5BCE5D000F539A /* LaundryLoopNew.app */;
 			productType = "com.apple.product-type.application.watchapp2-container";
 		};
-		853AE8152F5BCE5D000F539A /* LaundryLoopNew Watch App */ = {
+		853AE8152F5BCE5D000F539A /* Laundry Loop Watch App */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 853AE8392F5BCE5E000F539A /* Build configuration list for PBXNativeTarget "LaundryLoopNew Watch App" */;
+			buildConfigurationList = 853AE8392F5BCE5E000F539A /* Build configuration list for PBXNativeTarget "Laundry Loop Watch App" */;
 			buildPhases = (
 				853AE8122F5BCE5D000F539A /* Sources */,
 				853AE8132F5BCE5D000F539A /* Frameworks */,
@@ -223,11 +223,11 @@
 			fileSystemSynchronizedGroups = (
 				853AE81A2F5BCE5D000F539A /* LaundryLoopNew Watch App */,
 			);
-			name = "LaundryLoopNew Watch App";
+			name = "Laundry Loop Watch App";
 			packageProductDependencies = (
 			);
-			productName = "LaundryLoopNew Watch App";
-			productReference = 853AE8162F5BCE5D000F539A /* LaundryLoopNew Watch App.app */;
+			productName = "Laundry Loop Watch App";
+			productReference = 853AE8162F5BCE5D000F539A /* Laundry Loop Watch App.app */;
 			productType = "com.apple.product-type.application";
 		};
 		853AE8242F5BCE5E000F539A /* LaundryLoopNew Watch AppTests */ = {
@@ -342,7 +342,7 @@
 			projectRoot = "";
 			targets = (
 				853AE80F2F5BCE5D000F539A /* LaundryLoopNew */,
-				853AE8152F5BCE5D000F539A /* LaundryLoopNew Watch App */,
+				853AE8152F5BCE5D000F539A /* Laundry Loop Watch App */,
 				853AE8242F5BCE5E000F539A /* LaundryLoopNew Watch AppTests */,
 				853AE82E2F5BCE5E000F539A /* LaundryLoopNew Watch AppUITests */,
 				853AE8FD2F5BCF86000F539A /* Laundry Loop WidgetsExtension */,
@@ -422,17 +422,17 @@
 /* Begin PBXTargetDependency section */
 		853AE8192F5BCE5D000F539A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 853AE8152F5BCE5D000F539A /* LaundryLoopNew Watch App */;
+			target = 853AE8152F5BCE5D000F539A /* Laundry Loop Watch App */;
 			targetProxy = 853AE8182F5BCE5D000F539A /* PBXContainerItemProxy */;
 		};
 		853AE8272F5BCE5E000F539A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 853AE8152F5BCE5D000F539A /* LaundryLoopNew Watch App */;
+			target = 853AE8152F5BCE5D000F539A /* Laundry Loop Watch App */;
 			targetProxy = 853AE8262F5BCE5E000F539A /* PBXContainerItemProxy */;
 		};
 		853AE8312F5BCE5E000F539A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 853AE8152F5BCE5D000F539A /* LaundryLoopNew Watch App */;
+			target = 853AE8152F5BCE5D000F539A /* Laundry Loop Watch App */;
 			targetProxy = 853AE8302F5BCE5E000F539A /* PBXContainerItemProxy */;
 		};
 		853AE90D2F5BCF86000F539A /* PBXTargetDependency */ = {
@@ -681,7 +681,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LaundryLoopNew Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LaundryLoopNew Watch App";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Laundry Loop Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Laundry Loop Watch App";
 				WATCHOS_DEPLOYMENT_TARGET = 26.2;
 			};
 			name = Debug;
@@ -704,7 +704,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LaundryLoopNew Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LaundryLoopNew Watch App";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Laundry Loop Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Laundry Loop Watch App";
 				VALIDATE_PRODUCT = YES;
 				WATCHOS_DEPLOYMENT_TARGET = 26.2;
 			};
@@ -727,7 +727,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				TEST_TARGET_NAME = "LaundryLoopNew Watch App";
+				TEST_TARGET_NAME = "Laundry Loop Watch App";
 				WATCHOS_DEPLOYMENT_TARGET = 26.2;
 			};
 			name = Debug;
@@ -749,7 +749,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				TEST_TARGET_NAME = "LaundryLoopNew Watch App";
+				TEST_TARGET_NAME = "Laundry Loop Watch App";
 				VALIDATE_PRODUCT = YES;
 				WATCHOS_DEPLOYMENT_TARGET = 26.2;
 			};
@@ -836,7 +836,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		853AE8392F5BCE5E000F539A /* Build configuration list for PBXNativeTarget "LaundryLoopNew Watch App" */ = {
+		853AE8392F5BCE5E000F539A /* Build configuration list for PBXNativeTarget "Laundry Loop Watch App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				853AE83A2F5BCE5E000F539A /* Debug */,

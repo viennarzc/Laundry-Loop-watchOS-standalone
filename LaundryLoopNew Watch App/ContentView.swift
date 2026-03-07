@@ -1,24 +1,44 @@
-//
-//  ContentView.swift
-//  LaundryLoopNew Watch App
-//
-//  Created by Viennarz Curtiz on 3/7/26.
-//
-
 import SwiftUI
 
+@MainActor
 struct ContentView: View {
+    @Environment(\.scenePhase) private var scenePhase
+    @StateObject private var coordinator: CycleCoordinator
+
+    init(coordinator: CycleCoordinator? = nil) {
+        _coordinator = StateObject(wrappedValue: coordinator ?? AppEnvironment.makeCoordinator())
+    }
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            Group {
+                if let snapshot = coordinator.snapshot {
+                    ActiveCycleView(coordinator: coordinator, snapshot: snapshot)
+                } else {
+                    HomeView(coordinator: coordinator)
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
+                        SettingsView(coordinator: coordinator)
+                    } label: {
+                        Image(systemName: "gearshape")
+                    }
+                    .accessibilityLabel("Settings")
+                }
+            }
         }
-        .padding()
+        .task {
+            await coordinator.refreshFromPersistence()
+        }
+        .task(id: scenePhase) {
+            guard scenePhase == .active else { return }
+            await coordinator.refreshFromPersistence()
+        }
     }
 }
 
 #Preview {
-    ContentView()
+    ContentView(coordinator: PreviewSupport.makeCoordinator())
 }
