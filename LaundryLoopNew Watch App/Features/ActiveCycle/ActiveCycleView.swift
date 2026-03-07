@@ -72,34 +72,38 @@ struct ActiveCycleView: View {
     }
 
     private func infoRow(nextReminder: Date?, elapsed: TimeInterval, total: TimeInterval) -> some View {
-        HStack(spacing: DesignTokens.infoSpacing) {
+        VStack(alignment: .leading, spacing: DesignTokens.infoSpacing) {
             if let reminder = nextReminder {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Next reminder")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                    Text(DurationFormatter.clockString(for: reminder))
-                        .font(.callout)
-                }
+                infoItem(
+                    title: "Next reminder",
+                    value: DurationFormatter.clockString(for: reminder)
+                )
             }
-            Spacer()
-            VStack(alignment: .trailing, spacing: 2) {
-                Text("Elapsed")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                Text(DurationFormatter.minutesString(seconds: elapsed))
-                    .font(.callout)
-            }
-            VStack(alignment: .trailing, spacing: 2) {
-                Text("Total")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                Text(DurationFormatter.minutesString(seconds: total))
-                    .font(.callout)
-            }
+
+            infoItem(
+                title: "Elapsed",
+                value: DurationFormatter.minutesString(seconds: elapsed)
+            )
+
+            infoItem(
+                title: "Total",
+                value: DurationFormatter.minutesString(seconds: total)
+            )
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: DesignTokens.cardCornerRadius, style: .continuous))
+    }
+
+    private func infoItem(title: String, value: String) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(title)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+            Text(value)
+                .font(.callout)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private func actionSection(for snapshot: ActiveCycleSnapshot) -> some View {

@@ -51,6 +51,30 @@ struct WidgetCycleSnapshot: Codable, Equatable {
         }
         return end.addingTimeInterval(-TimeInterval(reminderLeadMinutes * 60))
     }
+
+    var displayEndDate: Date? {
+        guard status == .running || status == .snoozed else {
+            return nil
+        }
+        return scheduledEnd
+    }
+
+    var displayStateLine: String {
+        switch status {
+        case .running: return "Running"
+        case .paused: return "Paused"
+        case .completed: return "Done"
+        case .snoozed: return "Snoozed"
+        case .idle: return "Idle"
+        }
+    }
+
+    var displayRemainingString: String? {
+        guard status == .paused else {
+            return nil
+        }
+        return WidgetSnapshotStore.durationString(WidgetSnapshotStore.remaining(for: self))
+    }
 }
 
 enum WidgetSnapshotStore {
@@ -75,12 +99,6 @@ enum WidgetSnapshotStore {
         }
     }
 
-    static func progress(for snapshot: WidgetCycleSnapshot, now: Date = .now) -> Double {
-        guard snapshot.countdownDuration > 0 else { return 1 }
-        let progress = 1 - (remaining(for: snapshot, now: now) / snapshot.countdownDuration)
-        return min(max(progress, 0), 1)
-    }
-
     static func normalized(_ snapshot: WidgetCycleSnapshot, now: Date = .now) -> WidgetCycleSnapshot {
         guard snapshot.status == .running || snapshot.status == .snoozed else { return snapshot }
         guard let end = snapshot.scheduledEnd, end <= now else { return snapshot }
@@ -93,25 +111,8 @@ enum WidgetSnapshotStore {
         return completed
     }
 
-    static func stateLine(for snapshot: WidgetCycleSnapshot) -> String {
-        switch snapshot.status {
-        case .running: return "Running"
-        case .paused: return "Paused"
-        case .completed: return "Done"
-        case .snoozed: return "Snoozed"
-        case .idle: return "Idle"
-        }
-    }
-
     static func durationString(_ seconds: TimeInterval) -> String {
         let totalSeconds = max(Int(seconds.rounded()), 0)
         return String(format: "%02d:%02d", totalSeconds / 60, totalSeconds % 60)
-    }
-
-    /// Returns a reasonable refresh cadence for the timeline based on how much time remains.
-    static func refreshInterval(for snapshot: WidgetCycleSnapshot?, now: Date = .now) -> TimeInterval {
-        guard let snapshot else { return 120 }
-        let remaining = remaining(for: snapshot, now: now)
-        return max(min(remaining, 60), 20)
     }
 }
