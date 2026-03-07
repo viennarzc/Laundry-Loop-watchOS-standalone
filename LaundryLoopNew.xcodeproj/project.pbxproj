@@ -1,0 +1,695 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		853AE8172F5BCE5D000F539A /* LaundryLoopNew Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 853AE8162F5BCE5D000F539A /* LaundryLoopNew Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		853AE8182F5BCE5D000F539A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 853AE80A2F5BCE5C000F539A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 853AE8152F5BCE5D000F539A;
+			remoteInfo = "LaundryLoopNew Watch App";
+		};
+		853AE8262F5BCE5E000F539A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 853AE80A2F5BCE5C000F539A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 853AE8152F5BCE5D000F539A;
+			remoteInfo = "LaundryLoopNew Watch App";
+		};
+		853AE8302F5BCE5E000F539A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 853AE80A2F5BCE5C000F539A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 853AE8152F5BCE5D000F539A;
+			remoteInfo = "LaundryLoopNew Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		853AE83C2F5BCE5E000F539A /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				853AE8172F5BCE5D000F539A /* LaundryLoopNew Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		853AE8102F5BCE5D000F539A /* LaundryLoopNew.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LaundryLoopNew.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		853AE8162F5BCE5D000F539A /* LaundryLoopNew Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LaundryLoopNew Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		853AE8252F5BCE5E000F539A /* LaundryLoopNew Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "LaundryLoopNew Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		853AE82F2F5BCE5E000F539A /* LaundryLoopNew Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "LaundryLoopNew Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		853AE81A2F5BCE5D000F539A /* LaundryLoopNew Watch App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "LaundryLoopNew Watch App";
+			sourceTree = "<group>";
+		};
+		853AE8282F5BCE5E000F539A /* LaundryLoopNew Watch AppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "LaundryLoopNew Watch AppTests";
+			sourceTree = "<group>";
+		};
+		853AE8322F5BCE5E000F539A /* LaundryLoopNew Watch AppUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "LaundryLoopNew Watch AppUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		853AE8132F5BCE5D000F539A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		853AE8222F5BCE5E000F539A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		853AE82C2F5BCE5E000F539A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		853AE8092F5BCE5C000F539A = {
+			isa = PBXGroup;
+			children = (
+				853AE81A2F5BCE5D000F539A /* LaundryLoopNew Watch App */,
+				853AE8282F5BCE5E000F539A /* LaundryLoopNew Watch AppTests */,
+				853AE8322F5BCE5E000F539A /* LaundryLoopNew Watch AppUITests */,
+				853AE8112F5BCE5D000F539A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		853AE8112F5BCE5D000F539A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				853AE8102F5BCE5D000F539A /* LaundryLoopNew.app */,
+				853AE8162F5BCE5D000F539A /* LaundryLoopNew Watch App.app */,
+				853AE8252F5BCE5E000F539A /* LaundryLoopNew Watch AppTests.xctest */,
+				853AE82F2F5BCE5E000F539A /* LaundryLoopNew Watch AppUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		853AE80F2F5BCE5D000F539A /* LaundryLoopNew */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 853AE83D2F5BCE5E000F539A /* Build configuration list for PBXNativeTarget "LaundryLoopNew" */;
+			buildPhases = (
+				853AE80E2F5BCE5D000F539A /* Resources */,
+				853AE83C2F5BCE5E000F539A /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				853AE8192F5BCE5D000F539A /* PBXTargetDependency */,
+			);
+			name = LaundryLoopNew;
+			packageProductDependencies = (
+			);
+			productName = LaundryLoopNew;
+			productReference = 853AE8102F5BCE5D000F539A /* LaundryLoopNew.app */;
+			productType = "com.apple.product-type.application.watchapp2-container";
+		};
+		853AE8152F5BCE5D000F539A /* LaundryLoopNew Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 853AE8392F5BCE5E000F539A /* Build configuration list for PBXNativeTarget "LaundryLoopNew Watch App" */;
+			buildPhases = (
+				853AE8122F5BCE5D000F539A /* Sources */,
+				853AE8132F5BCE5D000F539A /* Frameworks */,
+				853AE8142F5BCE5D000F539A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				853AE81A2F5BCE5D000F539A /* LaundryLoopNew Watch App */,
+			);
+			name = "LaundryLoopNew Watch App";
+			packageProductDependencies = (
+			);
+			productName = "LaundryLoopNew Watch App";
+			productReference = 853AE8162F5BCE5D000F539A /* LaundryLoopNew Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
+		853AE8242F5BCE5E000F539A /* LaundryLoopNew Watch AppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 853AE8402F5BCE5E000F539A /* Build configuration list for PBXNativeTarget "LaundryLoopNew Watch AppTests" */;
+			buildPhases = (
+				853AE8212F5BCE5E000F539A /* Sources */,
+				853AE8222F5BCE5E000F539A /* Frameworks */,
+				853AE8232F5BCE5E000F539A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				853AE8272F5BCE5E000F539A /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				853AE8282F5BCE5E000F539A /* LaundryLoopNew Watch AppTests */,
+			);
+			name = "LaundryLoopNew Watch AppTests";
+			packageProductDependencies = (
+			);
+			productName = "LaundryLoopNew Watch AppTests";
+			productReference = 853AE8252F5BCE5E000F539A /* LaundryLoopNew Watch AppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		853AE82E2F5BCE5E000F539A /* LaundryLoopNew Watch AppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 853AE8432F5BCE5E000F539A /* Build configuration list for PBXNativeTarget "LaundryLoopNew Watch AppUITests" */;
+			buildPhases = (
+				853AE82B2F5BCE5E000F539A /* Sources */,
+				853AE82C2F5BCE5E000F539A /* Frameworks */,
+				853AE82D2F5BCE5E000F539A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				853AE8312F5BCE5E000F539A /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				853AE8322F5BCE5E000F539A /* LaundryLoopNew Watch AppUITests */,
+			);
+			name = "LaundryLoopNew Watch AppUITests";
+			packageProductDependencies = (
+			);
+			productName = "LaundryLoopNew Watch AppUITests";
+			productReference = 853AE82F2F5BCE5E000F539A /* LaundryLoopNew Watch AppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		853AE80A2F5BCE5C000F539A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2630;
+				LastUpgradeCheck = 2630;
+				TargetAttributes = {
+					853AE80F2F5BCE5D000F539A = {
+						CreatedOnToolsVersion = 26.3;
+					};
+					853AE8152F5BCE5D000F539A = {
+						CreatedOnToolsVersion = 26.3;
+					};
+					853AE8242F5BCE5E000F539A = {
+						CreatedOnToolsVersion = 26.3;
+						TestTargetID = 853AE8152F5BCE5D000F539A;
+					};
+					853AE82E2F5BCE5E000F539A = {
+						CreatedOnToolsVersion = 26.3;
+						TestTargetID = 853AE8152F5BCE5D000F539A;
+					};
+				};
+			};
+			buildConfigurationList = 853AE80D2F5BCE5C000F539A /* Build configuration list for PBXProject "LaundryLoopNew" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 853AE8092F5BCE5C000F539A;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 853AE8112F5BCE5D000F539A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				853AE80F2F5BCE5D000F539A /* LaundryLoopNew */,
+				853AE8152F5BCE5D000F539A /* LaundryLoopNew Watch App */,
+				853AE8242F5BCE5E000F539A /* LaundryLoopNew Watch AppTests */,
+				853AE82E2F5BCE5E000F539A /* LaundryLoopNew Watch AppUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		853AE80E2F5BCE5D000F539A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		853AE8142F5BCE5D000F539A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		853AE8232F5BCE5E000F539A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		853AE82D2F5BCE5E000F539A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		853AE8122F5BCE5D000F539A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		853AE8212F5BCE5E000F539A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		853AE82B2F5BCE5E000F539A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		853AE8192F5BCE5D000F539A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 853AE8152F5BCE5D000F539A /* LaundryLoopNew Watch App */;
+			targetProxy = 853AE8182F5BCE5D000F539A /* PBXContainerItemProxy */;
+		};
+		853AE8272F5BCE5E000F539A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 853AE8152F5BCE5D000F539A /* LaundryLoopNew Watch App */;
+			targetProxy = 853AE8262F5BCE5E000F539A /* PBXContainerItemProxy */;
+		};
+		853AE8312F5BCE5E000F539A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 853AE8152F5BCE5D000F539A /* LaundryLoopNew Watch App */;
+			targetProxy = 853AE8302F5BCE5E000F539A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		853AE8372F5BCE5E000F539A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 6UWE2EP59T;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		853AE8382F5BCE5E000F539A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 6UWE2EP59T;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		853AE83A2F5BCE5E000F539A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6UWE2EP59T;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = LaundryLoopNew;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = me.vnnz.LaundryLoopNew.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Debug;
+		};
+		853AE83B2F5BCE5E000F539A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6UWE2EP59T;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = LaundryLoopNew;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = me.vnnz.LaundryLoopNew.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Release;
+		};
+		853AE83E2F5BCE5E000F539A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6UWE2EP59T;
+				INFOPLIST_KEY_CFBundleDisplayName = LaundryLoopNew;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = me.vnnz.LaundryLoopNew;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		853AE83F2F5BCE5E000F539A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6UWE2EP59T;
+				INFOPLIST_KEY_CFBundleDisplayName = LaundryLoopNew;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = me.vnnz.LaundryLoopNew;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		853AE8412F5BCE5E000F539A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6UWE2EP59T;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "me.vnnz.LaundryLoopNew-Watch-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LaundryLoopNew Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LaundryLoopNew Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Debug;
+		};
+		853AE8422F5BCE5E000F539A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6UWE2EP59T;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "me.vnnz.LaundryLoopNew-Watch-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LaundryLoopNew Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LaundryLoopNew Watch App";
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Release;
+		};
+		853AE8442F5BCE5E000F539A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6UWE2EP59T;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "me.vnnz.LaundryLoopNew-Watch-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "LaundryLoopNew Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Debug;
+		};
+		853AE8452F5BCE5E000F539A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6UWE2EP59T;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "me.vnnz.LaundryLoopNew-Watch-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "LaundryLoopNew Watch App";
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		853AE80D2F5BCE5C000F539A /* Build configuration list for PBXProject "LaundryLoopNew" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				853AE8372F5BCE5E000F539A /* Debug */,
+				853AE8382F5BCE5E000F539A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		853AE8392F5BCE5E000F539A /* Build configuration list for PBXNativeTarget "LaundryLoopNew Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				853AE83A2F5BCE5E000F539A /* Debug */,
+				853AE83B2F5BCE5E000F539A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		853AE83D2F5BCE5E000F539A /* Build configuration list for PBXNativeTarget "LaundryLoopNew" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				853AE83E2F5BCE5E000F539A /* Debug */,
+				853AE83F2F5BCE5E000F539A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		853AE8402F5BCE5E000F539A /* Build configuration list for PBXNativeTarget "LaundryLoopNew Watch AppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				853AE8412F5BCE5E000F539A /* Debug */,
+				853AE8422F5BCE5E000F539A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		853AE8432F5BCE5E000F539A /* Build configuration list for PBXNativeTarget "LaundryLoopNew Watch AppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				853AE8442F5BCE5E000F539A /* Debug */,
+				853AE8452F5BCE5E000F539A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 853AE80A2F5BCE5C000F539A /* Project object */;
+}
