@@ -4,6 +4,7 @@ import SwiftUI
 struct ActiveCycleView: View {
     @ObservedObject var coordinator: CycleCoordinator
     let snapshot: ActiveCycleSnapshot
+    @State private var showingFinishConfirmation = false
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: 1)) { context in
@@ -25,6 +26,19 @@ struct ActiveCycleView: View {
             .task(id: normalized.status) {
                 await coordinator.refreshTimerState()
             }
+            .alert(
+                "Finish cycle?",
+                isPresented: $showingFinishConfirmation,
+                actions: {
+                    Button("Finish", role: .destructive) {
+                        finishCycle()
+                    }
+                    Button("Cancel", role: .cancel, action: {})
+                },
+                message: {
+                    Text("Confirm to stop tracking and clear this cycle.")
+                }
+            )
         }
     }
 
@@ -133,11 +147,11 @@ struct ActiveCycleView: View {
             .buttonStyle(.borderedProminent)
             .accessibilityIdentifier("pause-resume-button")
 
-            Button("Done") {
-                Task { await coordinator.markDone() }
+            Button("Finish") {
+                showingFinishConfirmation = true
             }
             .buttonStyle(.bordered)
-            .accessibilityIdentifier("done-button")
+            .accessibilityIdentifier("finish-button")
 
             Button("Restart") {
                 Task { await coordinator.restartCycle() }
@@ -162,16 +176,22 @@ struct ActiveCycleView: View {
             .buttonStyle(.bordered)
             .accessibilityIdentifier("snooze-button")
 
-            Button("Done") {
-                Task { await coordinator.markDone() }
+            Button("Finish") {
+                showingFinishConfirmation = true
             }
             .buttonStyle(.bordered)
-            .accessibilityIdentifier("done-button")
+            .accessibilityIdentifier("finish-button")
         }
     }
 
     private func progressNormalized(progress: Double) -> CGFloat {
         CGFloat(max(min(progress, 1), 0))
+    }
+
+    private func finishCycle() {
+        Task {
+            await coordinator.markDone()
+        }
     }
 }
 

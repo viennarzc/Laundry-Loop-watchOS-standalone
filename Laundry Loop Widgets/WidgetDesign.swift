@@ -54,7 +54,7 @@ struct WidgetPrimaryStatusValue: View {
             switch snapshot.status {
             case .running, .snoozed:
                 if let endDate = snapshot.displayEndDate {
-                    VStack(alignment: .leading, spacing: 2) {
+                    HStack(alignment: .firstTextBaseline, spacing: 4) {
                         Text("Ends")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
@@ -88,6 +88,8 @@ struct WidgetPrimaryStatusValue: View {
                     Text("Laundry done")
                         .font(.callout)
                         .fontWeight(.semibold)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
                 }
 
             case .idle:

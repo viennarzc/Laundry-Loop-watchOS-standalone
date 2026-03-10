@@ -4,10 +4,16 @@ import SwiftUI
 struct CustomDurationSheet: View {
     @ObservedObject var coordinator: CycleCoordinator
     @Environment(\.dismiss) private var dismiss
-    @State private var cycleKind: CycleKind = .washer
-    @State private var durationMinutes = 45
+    @State private var cycleKind: CycleKind
+    @State private var durationMinutes: Int
 
-    private let minuteOptions = [15, 30, 45, 60, 90]
+    private let minuteOptions = Array(stride(from: 15, through: 120, by: 5))
+
+    init(coordinator: CycleCoordinator) {
+        self.coordinator = coordinator
+        _cycleKind = State(initialValue: .washer)
+        _durationMinutes = State(initialValue: coordinator.settings.defaultWasherMinutes)
+    }
 
     var body: some View {
         NavigationStack {
@@ -17,10 +23,13 @@ struct CustomDurationSheet: View {
                         Text(kind.title).tag(kind)
                     }
                 }
+                .onChange(of: cycleKind) { newKind in
+                    durationMinutes = defaultMinutes(for: newKind)
+                }
 
                 Picker("Duration", selection: $durationMinutes) {
                     ForEach(minuteOptions, id: \.self) { minute in
-                        Text("\(minute) minutes").tag(minute)
+                        Text("\(minute) min").tag(minute)
                     }
                 }
             }
@@ -35,6 +44,15 @@ struct CustomDurationSheet: View {
                     }
                 }
             }
+        }
+    }
+
+    private func defaultMinutes(for kind: CycleKind) -> Int {
+        switch kind {
+        case .washer:
+            return coordinator.settings.defaultWasherMinutes
+        case .dryer:
+            return coordinator.settings.defaultDryerMinutes
         }
     }
 }
