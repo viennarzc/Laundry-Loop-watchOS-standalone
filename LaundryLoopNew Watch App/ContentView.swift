@@ -3,11 +3,7 @@ import SwiftUI
 @MainActor
 struct ContentView: View {
     @Environment(\.scenePhase) private var scenePhase
-    @StateObject private var coordinator: CycleCoordinator
-
-    init(coordinator: CycleCoordinator? = nil) {
-        _coordinator = StateObject(wrappedValue: coordinator ?? AppEnvironment.makeCoordinator())
-    }
+    @ObservedObject var coordinator: CycleCoordinator
 
     var body: some View {
         NavigationStack {

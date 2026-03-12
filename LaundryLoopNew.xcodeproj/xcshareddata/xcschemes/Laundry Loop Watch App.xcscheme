@@ -43,6 +43,27 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
       shouldAutocreateTestPlan = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "853AE8152F5BCE5D000F539A"
+            BuildableName = "Laundry Loop Watch App.app"
+            BlueprintName = "Laundry Loop Watch App"
+            ReferencedContainer = "container:LaundryLoopNew.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
+      <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "853AE8242F5BCE5E000F539A"
+               BuildableName = "LaundryLoopNew Watch AppTests.xctest"
+               BlueprintName = "LaundryLoopNew Watch AppTests"
+               ReferencedContainer = "container:LaundryLoopNew.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+      </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"

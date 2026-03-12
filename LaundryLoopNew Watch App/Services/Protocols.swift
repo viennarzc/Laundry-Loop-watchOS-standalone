@@ -24,6 +24,22 @@ protocol NotificationScheduling: Sendable {
     func cancelScheduledNotifications() async
 }
 
+public protocol UserNotificationCentering: AnyObject {
+    func setNotificationCategories(_ categories: Set<UNNotificationCategory>)
+    func authorizationStatus() async -> UNAuthorizationStatus
+    func requestAuthorization(options: UNAuthorizationOptions) async throws -> Bool
+    func add(_ request: UNNotificationRequest) async throws
+    func removePendingNotificationRequests(withIdentifiers identifiers: [String])
+    func removeDeliveredNotifications(withIdentifiers identifiers: [String])
+}
+
 protocol HapticsPlaying: Sendable {
     func play(_ event: LaundryHapticEvent)
+}
+
+extension UNUserNotificationCenter: UserNotificationCentering {
+    public func authorizationStatus() async -> UNAuthorizationStatus {
+        let settings = await notificationSettings()
+        return settings.authorizationStatus
+    }
 }

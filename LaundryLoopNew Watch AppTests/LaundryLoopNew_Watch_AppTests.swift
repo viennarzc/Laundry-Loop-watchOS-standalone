@@ -1,17 +1,359 @@
-//
-//  LaundryLoopNew_Watch_AppTests.swift
-//  LaundryLoopNew Watch AppTests
-//
-//  Created by Viennarz Curtiz on 3/7/26.
-//
-
+import Foundation
 import Testing
-@testable import LaundryLoopNew_Watch_App
+import UserNotifications
+@testable import Laundry_Loop_Watch_App
 
 struct LaundryLoopNew_Watch_AppTests {
+    @Test func startDryerActionStartsDryerCycleFromCompletedWasher() async throws {
+        let stores = TestStores(snapshot: makeCompletedSnapshot(kind: .washer))
+        let scheduler = MockNotificationScheduler()
+        let coordinator = await makeCoordinator(stores: stores, scheduler: scheduler)
 
-    @Test func example() async throws {
-        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+        await coordinator.handleNotificationAction(identifier: AppConstants.notificationActionStartDryer)
+
+        guard let snapshot = await MainActor.run(body: { coordinator.snapshot }) else {
+            Issue.record("Expected a dryer snapshot after handling Start Dryer.")
+            return
+        }
+        #expect(snapshot.kind == .dryer)
+        #expect(snapshot.status == .running)
+        #expect(scheduler.scheduledSnapshots.last?.kind == .dryer)
+        #expect(stores.snapshotStore.snapshot?.kind == .dryer)
     }
 
+    @Test func doneActionClearsSnapshotAndCancelsNotifications() async {
+        let stores = TestStores(snapshot: makeCompletedSnapshot(kind: .washer))
+        let scheduler = MockNotificationScheduler()
+        let coordinator = await makeCoordinator(stores: stores, scheduler: scheduler)
+
+        await coordinator.handleNotificationAction(identifier: AppConstants.notificationActionDone)
+
+        let snapshot = await MainActor.run(body: { coordinator.snapshot })
+        #expect(snapshot == nil)
+        #expect(stores.snapshotStore.snapshot == nil)
+        #expect(scheduler.cancelCallCount == 1)
+    }
+
+    @Test func snoozeActionMovesSnapshotIntoSnoozedStateAndReschedules() async throws {
+        let stores = TestStores(snapshot: makeCompletedSnapshot(kind: .dryer))
+        let scheduler = MockNotificationScheduler()
+        let coordinator = await makeCoordinator(stores: stores, scheduler: scheduler)
+
+        await coordinator.handleNotificationAction(identifier: AppConstants.notificationActionSnooze)
+
+        guard let snapshot = await MainActor.run(body: { coordinator.snapshot }) else {
+            Issue.record("Expected a snoozed snapshot after handling Snooze.")
+            return
+        }
+        #expect(snapshot.kind == .dryer)
+        #expect(snapshot.status == .snoozed)
+        #expect(snapshot.countdownDuration == 5 * 60)
+        #expect(snapshot.scheduledEnd != nil)
+        #expect(scheduler.scheduledSnapshots.last?.status == .snoozed)
+    }
+
+    @Test func refreshFromPersistenceSchedulesCompletedSnapshotForOverdueReminders() async throws {
+        let stores = TestStores(snapshot: makeExpiredRunningSnapshot(kind: .washer))
+        let scheduler = MockNotificationScheduler()
+        let coordinator = await makeCoordinator(stores: stores, scheduler: scheduler)
+
+        await coordinator.refreshFromPersistence()
+
+        guard let snapshot = await MainActor.run(body: { coordinator.snapshot }) else {
+            Issue.record("Expected a completed snapshot after refresh.")
+            return
+        }
+        #expect(snapshot.status == .completed)
+        #expect(snapshot.completedAt != nil)
+        #expect(scheduler.scheduledSnapshots.last?.status == .completed)
+    }
+
+    @Test func registerCategoriesSplitsWasherDryerAndReminderActions() async throws {
+        let center = MockUserNotificationCenter()
+        let scheduler = makeNotificationScheduler(center: center)
+
+        await scheduler.registerCategories()
+
+        let categories = center.categories
+        let washerCategory = try #require(categories.first { $0.identifier == AppConstants.notificationWasherCompletionCategoryIdentifier })
+        let dryerCategory = try #require(categories.first { $0.identifier == AppConstants.notificationDryerCompletionCategoryIdentifier })
+        let prefinishCategory = try #require(categories.first { $0.identifier == AppConstants.notificationPrefinishReminderCategoryIdentifier })
+        let overdueCategory = try #require(categories.first { $0.identifier == AppConstants.notificationOverdueReminderCategoryIdentifier })
+
+        #expect(washerCategory.actions.map { $0.identifier } == [
+            AppConstants.notificationActionDone,
+            AppConstants.notificationActionSnooze,
+            AppConstants.notificationActionStartDryer,
+        ])
+        #expect(dryerCategory.actions.map { $0.identifier } == [
+            AppConstants.notificationActionDone,
+            AppConstants.notificationActionSnooze,
+        ])
+        #expect(prefinishCategory.actions.map { $0.identifier } == [
+            AppConstants.notificationActionDone,
+            AppConstants.notificationActionSnooze,
+        ])
+        #expect(overdueCategory.actions.map { $0.identifier } == [
+            AppConstants.notificationActionDone,
+            AppConstants.notificationActionSnooze,
+        ])
+    }
+
+    @Test func washerSchedulingUsesCompletionPrefinishAndOverdueCadence() async throws {
+        let center = MockUserNotificationCenter()
+        let scheduler = makeNotificationScheduler(center: center)
+        let settings = AppSettings.default
+        let now = Date()
+        let snapshot = CycleTimerEngine.start(kind: .washer, minutes: 60, reminderLeadMinutes: settings.reminderLeadMinutes, now: now)
+
+        await scheduler.scheduleNotifications(for: snapshot, settings: settings)
+
+        let completion = try #require(center.request(id: AppConstants.notificationWasherCompletionIdentifier))
+        let prefinish = try #require(center.request(id: AppConstants.notificationPrefinishReminderIdentifier))
+        let overdue15 = try #require(center.request(id: "\(AppConstants.notificationOverdueReminderIdentifierPrefix).15"))
+        let overdue45 = try #require(center.request(id: "\(AppConstants.notificationOverdueReminderIdentifierPrefix).45"))
+        let overdue105 = try #require(center.request(id: "\(AppConstants.notificationOverdueReminderIdentifierPrefix).105"))
+
+        #expect(completion.content.categoryIdentifier == AppConstants.notificationWasherCompletionCategoryIdentifier)
+        #expect(prefinish.content.categoryIdentifier == AppConstants.notificationPrefinishReminderCategoryIdentifier)
+        #expect(overdue15.content.categoryIdentifier == AppConstants.notificationOverdueReminderCategoryIdentifier)
+        #expect(overdue45.content.categoryIdentifier == AppConstants.notificationOverdueReminderCategoryIdentifier)
+        #expect(overdue105.content.categoryIdentifier == AppConstants.notificationOverdueReminderCategoryIdentifier)
+        #expect(completion.triggerInterval == 60 * 60)
+        #expect(prefinish.triggerInterval == 55 * 60)
+        #expect(overdue15.triggerInterval == 75 * 60)
+        #expect(overdue45.triggerInterval == 105 * 60)
+        #expect(overdue105.triggerInterval == 165 * 60)
+    }
+
+    @Test func completedSnapshotSchedulesOnlyRemainingOverdueReminders() async {
+        let center = MockUserNotificationCenter()
+        let scheduler = makeNotificationScheduler(center: center)
+        let completedAt = Date().addingTimeInterval(-20 * 60)
+        let snapshot = ActiveCycleSnapshot(
+            id: UUID(),
+            kind: .dryer,
+            status: .completed,
+            configuredDuration: 60 * 60,
+            countdownDuration: 60 * 60,
+            phaseStartedAt: completedAt.addingTimeInterval(-(60 * 60)),
+            scheduledEnd: nil,
+            remainingWhenPaused: 0,
+            lastModifiedAt: completedAt,
+            completedAt: completedAt,
+            reminderLeadMinutes: 5
+        )
+
+        await scheduler.scheduleNotifications(for: snapshot, settings: .default)
+
+        #expect(center.request(id: AppConstants.notificationDryerCompletionIdentifier) == nil)
+        #expect(center.request(id: AppConstants.notificationPrefinishReminderIdentifier) == nil)
+        #expect(center.request(id: "\(AppConstants.notificationOverdueReminderIdentifierPrefix).15") == nil)
+        #expect(center.request(id: "\(AppConstants.notificationOverdueReminderIdentifierPrefix).45") != nil)
+        #expect(center.request(id: "\(AppConstants.notificationOverdueReminderIdentifierPrefix).105") != nil)
+    }
+
+    @MainActor
+    private func makeCoordinator(stores: TestStores, scheduler: MockNotificationScheduler) -> CycleCoordinator {
+        CycleCoordinator(
+            snapshotStore: stores.snapshotStore,
+            settingsStore: stores.settingsStore,
+            recentPresetStore: stores.recentPresetStore,
+            notificationScheduler: scheduler,
+            haptics: SilentHaptics()
+        )
+    }
+
+    private func makeNotificationScheduler(center: MockUserNotificationCenter) -> NotificationScheduler {
+        NotificationScheduler(center: center)
+    }
+
+    private func makeCompletedSnapshot(kind: CycleKind) -> ActiveCycleSnapshot {
+        let completedAt = Date().addingTimeInterval(-2 * 60)
+        return ActiveCycleSnapshot(
+            id: UUID(),
+            kind: kind,
+            status: .completed,
+            configuredDuration: 45 * 60,
+            countdownDuration: 45 * 60,
+            phaseStartedAt: completedAt.addingTimeInterval(-(45 * 60)),
+            scheduledEnd: nil,
+            remainingWhenPaused: 0,
+            lastModifiedAt: completedAt,
+            completedAt: completedAt,
+            reminderLeadMinutes: 5
+        )
+    }
+
+    private func makeExpiredRunningSnapshot(kind: CycleKind) -> ActiveCycleSnapshot {
+        let end = Date().addingTimeInterval(-30)
+        return ActiveCycleSnapshot(
+            id: UUID(),
+            kind: kind,
+            status: .running,
+            configuredDuration: 45 * 60,
+            countdownDuration: 45 * 60,
+            phaseStartedAt: end.addingTimeInterval(-(45 * 60)),
+            scheduledEnd: end,
+            remainingWhenPaused: nil,
+            lastModifiedAt: end,
+            completedAt: nil,
+            reminderLeadMinutes: 5
+        )
+    }
+}
+
+private struct TestStores {
+    let snapshotStore: InMemorySnapshotStore
+    let settingsStore: InMemorySettingsStore
+    let recentPresetStore: InMemoryRecentPresetStore
+
+    init(snapshot: ActiveCycleSnapshot? = nil, settings: AppSettings = .default) {
+        self.snapshotStore = InMemorySnapshotStore(snapshot: snapshot)
+        self.settingsStore = InMemorySettingsStore(settings: settings)
+        self.recentPresetStore = InMemoryRecentPresetStore()
+    }
+}
+
+private final class InMemorySnapshotStore: SnapshotStoring, @unchecked Sendable {
+    var snapshot: ActiveCycleSnapshot?
+
+    init(snapshot: ActiveCycleSnapshot?) {
+        self.snapshot = snapshot
+    }
+
+    func load() -> ActiveCycleSnapshot? {
+        snapshot
+    }
+
+    func save(_ snapshot: ActiveCycleSnapshot?) {
+        self.snapshot = snapshot
+    }
+}
+
+private final class InMemorySettingsStore: SettingsStoring, @unchecked Sendable {
+    var settings: AppSettings
+
+    init(settings: AppSettings) {
+        self.settings = settings
+    }
+
+    func loadSettings() throws -> AppSettings {
+        settings
+    }
+
+    func saveSettings(_ settings: AppSettings) throws {
+        self.settings = settings
+    }
+}
+
+private final class InMemoryRecentPresetStore: RecentPresetStoring, @unchecked Sendable {
+    private var presets: [RecentPreset] = []
+
+    func loadRecentPresets() throws -> [RecentPreset] {
+        presets
+    }
+
+    func remember(kind: CycleKind, durationMinutes: Int, usedAt: Date) throws {
+        presets.insert(
+            RecentPreset(id: UUID(), kind: kind, durationMinutes: durationMinutes, lastUsedAt: usedAt),
+            at: 0
+        )
+    }
+}
+
+private final class MockNotificationScheduler: NotificationScheduling, @unchecked Sendable {
+    var registered = false
+    var scheduledSnapshots: [ActiveCycleSnapshot] = []
+    var cancelCallCount = 0
+
+    func registerCategories() async {
+        registered = true
+    }
+
+    func authorizationStatus() async -> UNAuthorizationStatus {
+        .authorized
+    }
+
+    func requestAuthorizationIfNeeded() async -> Bool {
+        true
+    }
+
+    func scheduleNotifications(for snapshot: ActiveCycleSnapshot, settings: AppSettings) async {
+        scheduledSnapshots.append(snapshot)
+    }
+
+    func cancelScheduledNotifications() async {
+        cancelCallCount += 1
+    }
+}
+
+private final class SilentHaptics: HapticsPlaying, @unchecked Sendable {
+    func play(_ event: LaundryHapticEvent) {}
+}
+
+private final class MockUserNotificationCenter: UserNotificationCentering, @unchecked Sendable {
+    private let lock = NSLock()
+    private var storedCategories: Set<UNNotificationCategory> = []
+    private var storedRequests: [UNNotificationRequest] = []
+    private var storedRemovedPendingIdentifiers: [String] = []
+    private var storedRemovedDeliveredIdentifiers: [String] = []
+
+    func setNotificationCategories(_ categories: Set<UNNotificationCategory>) {
+        lock.withLock {
+            storedCategories = categories
+        }
+    }
+
+    func authorizationStatus() async -> UNAuthorizationStatus {
+        .authorized
+    }
+
+    func requestAuthorization(options: UNAuthorizationOptions) async throws -> Bool {
+        true
+    }
+
+    func add(_ request: UNNotificationRequest) async throws {
+        lock.withLock {
+            storedRequests.removeAll { $0.identifier == request.identifier }
+            storedRequests.append(request)
+        }
+    }
+
+    func removePendingNotificationRequests(withIdentifiers identifiers: [String]) {
+        lock.withLock {
+            storedRemovedPendingIdentifiers.append(contentsOf: identifiers)
+            storedRequests.removeAll { identifiers.contains($0.identifier) }
+        }
+    }
+
+    func removeDeliveredNotifications(withIdentifiers identifiers: [String]) {
+        lock.withLock {
+            storedRemovedDeliveredIdentifiers.append(contentsOf: identifiers)
+        }
+    }
+
+    var categories: Set<UNNotificationCategory> {
+        lock.withLock { storedCategories }
+    }
+
+    func request(id: String) -> UNNotificationRequest? {
+        lock.withLock {
+            storedRequests.first { $0.identifier == id }
+        }
+    }
+}
+
+private extension NSLock {
+    func withLock<T>(_ body: () -> T) -> T {
+        lock()
+        defer { unlock() }
+        return body()
+    }
+}
+
+private extension UNNotificationRequest {
+    var triggerInterval: TimeInterval? {
+        (trigger as? UNTimeIntervalNotificationTrigger)?.timeInterval
+    }
 }

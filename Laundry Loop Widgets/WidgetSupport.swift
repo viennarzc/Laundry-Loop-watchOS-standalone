@@ -63,10 +63,28 @@ struct WidgetCycleSnapshot: Codable, Equatable {
         switch status {
         case .running: return "Running"
         case .paused: return "Paused"
-        case .completed: return "Done"
+        case .completed:
+            if let completedAt {
+                return "Finished \(WidgetSnapshotStore.elapsedString(since: completedAt))"
+            }
+            return "Done"
         case .snoozed: return "Snoozed"
         case .idle: return "Idle"
         }
+    }
+
+    var completedDisplayLabel: String {
+        guard status == .completed, let completedAt else {
+            return "Laundry done"
+        }
+        return "Finished \(WidgetSnapshotStore.elapsedString(since: completedAt))"
+    }
+
+    var completedCompactLabel: String {
+        guard status == .completed, let completedAt else {
+            return "Done"
+        }
+        return WidgetSnapshotStore.compactElapsedString(since: completedAt)
     }
 
     var displayRemainingString: String? {
@@ -114,5 +132,47 @@ enum WidgetSnapshotStore {
     static func durationString(_ seconds: TimeInterval) -> String {
         let totalSeconds = max(Int(seconds.rounded()), 0)
         return String(format: "%02d:%02d", totalSeconds / 60, totalSeconds % 60)
+    }
+
+    static func elapsedString(since date: Date, now: Date = .now) -> String {
+        let elapsed = max(now.timeIntervalSince(date), 0)
+
+        if elapsed < 60 {
+            return "just now"
+        }
+
+        let minutes = Int(elapsed / 60)
+        if minutes < 60 {
+            return "\(minutes)m ago"
+        }
+
+        let hours = Int(elapsed / 3600)
+        if hours < 24 {
+            return "\(hours)h ago"
+        }
+
+        let days = Int(elapsed / 86_400)
+        return "\(days)d ago"
+    }
+
+    static func compactElapsedString(since date: Date, now: Date = .now) -> String {
+        let elapsed = max(now.timeIntervalSince(date), 0)
+
+        if elapsed < 60 {
+            return "now"
+        }
+
+        let minutes = Int(elapsed / 60)
+        if minutes < 60 {
+            return "\(minutes)m ago"
+        }
+
+        let hours = Int(elapsed / 3600)
+        if hours < 24 {
+            return "\(hours)h ago"
+        }
+
+        let days = Int(elapsed / 86_400)
+        return "\(days)d ago"
     }
 }

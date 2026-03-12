@@ -82,10 +82,10 @@ struct WidgetPrimaryStatusValue: View {
 
             case .completed:
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Done")
+                    Text("Finished")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
-                    Text("Laundry done")
+                    Text(snapshot.completedDisplayLabel)
                         .font(.callout)
                         .fontWeight(.semibold)
                         .lineLimit(1)
@@ -187,8 +187,10 @@ struct WidgetAccessoryCircularContent: View {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.caption)
                     .foregroundStyle(.green)
-                Text("Done")
+                Text(snapshot.completedCompactLabel)
                     .font(.system(size: 9, weight: .semibold, design: .rounded))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
             }
             .multilineTextAlignment(.center)
 
@@ -246,7 +248,7 @@ struct WidgetAccessoryInlineContent: View {
             return Text("\(snapshot.kind.title) Paused")
 
         case .completed:
-            return Text("\(snapshot.kind.title) Done")
+            return Text("\(snapshot.kind.title) done ") + Text(snapshot.completedCompactLabel)
 
         case .idle:
             return Text("No active cycle")

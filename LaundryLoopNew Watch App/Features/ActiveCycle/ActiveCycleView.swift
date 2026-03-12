@@ -12,12 +12,11 @@ struct ActiveCycleView: View {
             let remaining = CycleTimerEngine.remainingTime(for: normalized, now: context.date)
             let progress = CycleTimerEngine.progress(for: normalized, now: context.date)
             let elapsed = max(context.date.timeIntervalSince(normalized.phaseStartedAt), 0)
-            let nextReminder = normalized.nextReminderAt
 
             ScrollView {
                 VStack(spacing: DesignTokens.sectionSpacing) {
                     heroCard(for: normalized, remaining: remaining, progress: progress)
-                    infoRow(nextReminder: nextReminder, elapsed: elapsed, total: normalized.configuredDuration)
+                    infoRow(for: normalized, now: context.date, elapsed: elapsed, total: normalized.configuredDuration)
                     actionSection(for: normalized)
                 }
                 .padding(.vertical, 8)
@@ -85,19 +84,26 @@ struct ActiveCycleView: View {
         .clipShape(RoundedRectangle(cornerRadius: DesignTokens.cardCornerRadius, style: .continuous))
     }
 
-    private func infoRow(nextReminder: Date?, elapsed: TimeInterval, total: TimeInterval) -> some View {
+    private func infoRow(for snapshot: ActiveCycleSnapshot, now: Date, elapsed: TimeInterval, total: TimeInterval) -> some View {
         VStack(alignment: .leading, spacing: DesignTokens.infoSpacing) {
-            if let reminder = nextReminder {
+            if snapshot.status == .completed, let completedLabel = snapshot.completedElapsedString(now: now) {
+                infoItem(
+                    title: "Finished",
+                    value: completedLabel
+                )
+            } else if let reminder = snapshot.nextReminderAt {
                 infoItem(
                     title: "Next reminder",
                     value: DurationFormatter.clockString(for: reminder)
                 )
             }
 
-            infoItem(
-                title: "Elapsed",
-                value: DurationFormatter.minutesString(seconds: elapsed)
-            )
+            if snapshot.status != .completed {
+                infoItem(
+                    title: "Elapsed",
+                    value: DurationFormatter.minutesString(seconds: elapsed)
+                )
+            }
 
             infoItem(
                 title: "Total",
