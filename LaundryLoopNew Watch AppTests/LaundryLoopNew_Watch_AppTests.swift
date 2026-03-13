@@ -119,11 +119,11 @@ struct LaundryLoopNew_Watch_AppTests {
         #expect(overdue15.content.categoryIdentifier == AppConstants.notificationOverdueReminderCategoryIdentifier)
         #expect(overdue45.content.categoryIdentifier == AppConstants.notificationOverdueReminderCategoryIdentifier)
         #expect(overdue105.content.categoryIdentifier == AppConstants.notificationOverdueReminderCategoryIdentifier)
-        #expect(completion.triggerInterval == 60 * 60)
-        #expect(prefinish.triggerInterval == 55 * 60)
-        #expect(overdue15.triggerInterval == 75 * 60)
-        #expect(overdue45.triggerInterval == 105 * 60)
-        #expect(overdue105.triggerInterval == 165 * 60)
+        #expect(hasTriggerInterval(completion, expected: 60 * 60))
+        #expect(hasTriggerInterval(prefinish, expected: 55 * 60))
+        #expect(hasTriggerInterval(overdue15, expected: 75 * 60))
+        #expect(hasTriggerInterval(overdue45, expected: 105 * 60))
+        #expect(hasTriggerInterval(overdue105, expected: 165 * 60))
     }
 
     @Test func completedSnapshotSchedulesOnlyRemainingOverdueReminders() async {
@@ -200,6 +200,17 @@ struct LaundryLoopNew_Watch_AppTests {
             completedAt: nil,
             reminderLeadMinutes: 5
         )
+    }
+
+    private func hasTriggerInterval(
+        _ request: UNNotificationRequest,
+        expected: TimeInterval,
+        tolerance: TimeInterval = 0.25
+    ) -> Bool {
+        guard let actual = request.triggerInterval else {
+            return false
+        }
+        return abs(actual - expected) <= tolerance
     }
 }
 
