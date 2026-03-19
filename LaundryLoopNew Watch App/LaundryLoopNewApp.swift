@@ -5,6 +5,7 @@
 //  Created by Viennarz Curtiz on 3/7/26.
 //
 
+import Combine
 import SwiftUI
 import UserNotifications
 
@@ -12,14 +13,14 @@ import UserNotifications
 @MainActor
 struct LaundryLoopNew_Watch_AppApp: App {
     @StateObject private var coordinator: CycleCoordinator
-    private let notificationRouter: NotificationResponseRouter
+    @StateObject private var notificationRouter: NotificationResponseRouter
 
     init() {
         let coordinator = AppEnvironment.makeCoordinator()
         _coordinator = StateObject(wrappedValue: coordinator)
 
         let notificationRouter = NotificationResponseRouter(coordinator: coordinator)
-        self.notificationRouter = notificationRouter
+        _notificationRouter = StateObject(wrappedValue: notificationRouter)
         notificationRouter.configure()
     }
 
@@ -30,7 +31,8 @@ struct LaundryLoopNew_Watch_AppApp: App {
     }
 }
 
-final class NotificationResponseRouter: NSObject, UNUserNotificationCenterDelegate {
+@MainActor
+final class NotificationResponseRouter: NSObject, ObservableObject, UNUserNotificationCenterDelegate {
     private let handleAction: @Sendable (String) async -> Void
     private let configureNotifications: @Sendable () async -> Void
 
@@ -50,6 +52,10 @@ final class NotificationResponseRouter: NSObject, UNUserNotificationCenterDelega
         Task {
             await configureNotifications()
         }
+    }
+
+    func handleActionIdentifier(_ identifier: String) async {
+        await handleAction(identifier)
     }
 
     nonisolated func userNotificationCenter(

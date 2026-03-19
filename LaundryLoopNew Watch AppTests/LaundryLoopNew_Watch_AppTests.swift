@@ -4,6 +4,26 @@ import UserNotifications
 @testable import Laundry_Loop_Watch_App
 
 struct LaundryLoopNew_Watch_AppTests {
+    @Test func notificationRouterForwardsStartDryerActionToCoordinator() async throws {
+        let stores = TestStores(snapshot: makeCompletedSnapshot(kind: .washer))
+        let scheduler = MockNotificationScheduler()
+        let coordinator = await makeCoordinator(stores: stores, scheduler: scheduler)
+        let router = await MainActor.run { NotificationResponseRouter(coordinator: coordinator) }
+
+        await MainActor.run {
+            router.configure()
+        }
+        await router.handleActionIdentifier(AppConstants.notificationActionStartDryer)
+
+        guard let snapshot = await MainActor.run(body: { coordinator.snapshot }) else {
+            Issue.record("Expected a dryer snapshot after the router forwards Start Dryer.")
+            return
+        }
+        #expect(snapshot.kind == .dryer)
+        #expect(snapshot.status == .running)
+        #expect(stores.snapshotStore.snapshot?.kind == .dryer)
+    }
+
     @Test func startDryerActionStartsDryerCycleFromCompletedWasher() async throws {
         let stores = TestStores(snapshot: makeCompletedSnapshot(kind: .washer))
         let scheduler = MockNotificationScheduler()
