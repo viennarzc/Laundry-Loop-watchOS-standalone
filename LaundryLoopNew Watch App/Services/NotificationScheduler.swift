@@ -15,7 +15,7 @@ final class NotificationScheduler: NotificationScheduling, @unchecked Sendable {
 
     func registerCategories() async {
         let doneAndSnoozeActions = [
-            UNNotificationAction(identifier: AppConstants.notificationActionDone, title: "Done"),
+            UNNotificationAction(identifier: AppConstants.notificationActionDone, title: "Finish"),
             UNNotificationAction(identifier: AppConstants.notificationActionSnooze, title: "Snooze 5 min"),
         ]
         let washerCompletionActions = doneAndSnoozeActions + [
