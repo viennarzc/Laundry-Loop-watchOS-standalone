@@ -26,7 +26,7 @@ struct WidgetCycleHeader: View {
     let snapshot: WidgetCycleSnapshot
 
     var body: some View {
-        HStack(alignment: .top, spacing: 6) {
+        HStack(alignment: .center, spacing: 6) {
             Image(systemName: snapshot.kind.symbolName)
                 .font(.headline)
                 .foregroundStyle(WidgetDesign.tint(for: snapshot.kind))
@@ -34,10 +34,10 @@ struct WidgetCycleHeader: View {
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(snapshot.kind.title)
-                    .font(.headline)
+                    .font(.subheadline)
                     .foregroundStyle(.primary)
                 Text(snapshot.displayStateLine)
-                    .font(.caption2)
+                    .font(.caption)
                     .foregroundStyle(.secondary)
             }
 
@@ -56,10 +56,10 @@ struct WidgetPrimaryStatusValue: View {
                 if let endDate = snapshot.displayEndDate {
                     HStack(alignment: .firstTextBaseline, spacing: 4) {
                         Text("Ends")
-                            .font(.caption2)
+                            .font(.caption)
                             .foregroundStyle(.secondary)
                         Text(endDate, style: .time)
-                            .font(.title3)
+                            .font(.subheadline)
                             .fontWeight(.semibold)
                             .lineLimit(1)
                             .minimumScaleFactor(0.8)
@@ -73,19 +73,19 @@ struct WidgetPrimaryStatusValue: View {
             case .paused:
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Remaining")
-                        .font(.caption2)
+                        .font(.caption)
                         .foregroundStyle(.secondary)
                     Text(snapshot.displayRemainingString ?? "00:00")
-                        .font(.title3)
+                        .font(.subheadline)
                         .fontWeight(.semibold)
                 }
 
             case .completed:
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Done")
-                        .font(.caption2)
+                    Text("Finished")
+                        .font(.caption)
                         .foregroundStyle(.secondary)
-                    Text("Laundry done")
+                    Text(snapshot.completedDisplayLabel)
                         .font(.callout)
                         .fontWeight(.semibold)
                         .lineLimit(1)
@@ -187,8 +187,10 @@ struct WidgetAccessoryCircularContent: View {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.caption)
                     .foregroundStyle(.green)
-                Text("Done")
+                Text(snapshot.completedCompactLabel)
                     .font(.system(size: 9, weight: .semibold, design: .rounded))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
             }
             .multilineTextAlignment(.center)
 
@@ -246,10 +248,25 @@ struct WidgetAccessoryInlineContent: View {
             return Text("\(snapshot.kind.title) Paused")
 
         case .completed:
-            return Text("\(snapshot.kind.title) Done")
+            return Text("\(snapshot.kind.title) done ") + Text(snapshot.completedCompactLabel)
 
         case .idle:
             return Text("No active cycle")
         }
     }
+}
+
+#Preview {
+    WidgetCycleHeader(
+        snapshot: .init(
+            id: UUID(),
+            kind: .washer,
+            status: .running,
+            configuredDuration: 90,
+            countdownDuration: 10,
+            phaseStartedAt: Date.now.addingTimeInterval(-60),
+            lastModifiedAt: Date.now,
+            reminderLeadMinutes: 5
+        )
+    )
 }

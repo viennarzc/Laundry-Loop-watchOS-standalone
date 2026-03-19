@@ -23,4 +23,11 @@ struct ActiveCycleSnapshot: Codable, Equatable, Sendable, Identifiable {
         }
         return end.addingTimeInterval(-TimeInterval(reminderLeadMinutes * 60))
     }
+
+    func completedElapsedString(now: Date = .now) -> String? {
+        guard status == .completed, let completedAt else {
+            return nil
+        }
+        return DurationFormatter.elapsedString(since: completedAt, now: now)
+    }
 }

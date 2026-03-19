@@ -45,11 +45,20 @@ final class CycleCoordinator: ObservableObject {
             let normalized = CycleTimerEngine.normalize(stored)
             snapshot = normalized
             snapshotStore.save(normalized)
+            await notificationScheduler.scheduleNotifications(for: normalized, settings: settings)
+        } else {
+            snapshot = nil
+            await notificationScheduler.cancelScheduledNotifications()
         }
         notificationStatus = await notificationScheduler.authorizationStatus()
         if snapshot?.status == .completed {
             playCompletionIfNeeded()
         }
+    }
+
+    func configureNotificationsOnLaunch() async {
+        await notificationScheduler.registerCategories()
+        notificationStatus = await notificationScheduler.authorizationStatus()
     }
 
     func startDefaultCycle(kind: CycleKind) async {
@@ -144,7 +153,7 @@ final class CycleCoordinator: ObservableObject {
         if normalized != snapshot {
             self.snapshot = normalized
             snapshotStore.save(normalized)
-            await notificationScheduler.cancelScheduledNotifications()
+            await notificationScheduler.scheduleNotifications(for: normalized, settings: settings)
             WidgetCenter.shared.reloadAllTimelines()
             playCompletionIfNeeded()
         }
@@ -170,6 +179,9 @@ final class CycleCoordinator: ObservableObject {
         case .paused:
             return "Paused"
         case .completed:
+            if let completedLabel = snapshot.completedElapsedString() {
+                return "Finished \(completedLabel)"
+            }
             return "Laundry done"
         case .snoozed:
             return "Snoozed"
