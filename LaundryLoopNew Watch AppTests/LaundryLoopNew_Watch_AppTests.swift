@@ -173,6 +173,170 @@ struct LaundryLoopNew_Watch_AppTests {
         #expect(center.request(id: "\(AppConstants.notificationOverdueReminderIdentifierPrefix).105") != nil)
     }
 
+    @Test func normalizeMarksExpiredRunningSnapshotCompleted() {
+        let now = Date(timeIntervalSinceReferenceDate: 1_000)
+        let snapshot = ActiveCycleSnapshot(
+            id: UUID(),
+            kind: .washer,
+            status: .running,
+            configuredDuration: 20 * 60,
+            countdownDuration: 20 * 60,
+            phaseStartedAt: now.addingTimeInterval(-(25 * 60)),
+            scheduledEnd: now.addingTimeInterval(-5),
+            remainingWhenPaused: nil,
+            lastModifiedAt: now.addingTimeInterval(-(30 * 60)),
+            completedAt: nil,
+            reminderLeadMinutes: 5
+        )
+
+        let normalized = CycleTimerEngine.normalize(snapshot, now: now)
+
+        #expect(normalized.status == .completed)
+        #expect(normalized.completedAt == now.addingTimeInterval(-5))
+        #expect(normalized.scheduledEnd == nil)
+        #expect(normalized.remainingWhenPaused == 0)
+        #expect(normalized.lastModifiedAt == now)
+    }
+
+    @Test func pauseStoresRemainingTimeAndResumeRestoresSchedule() {
+        let now = Date(timeIntervalSinceReferenceDate: 2_000)
+        let running = ActiveCycleSnapshot(
+            id: UUID(),
+            kind: .dryer,
+            status: .running,
+            configuredDuration: 30 * 60,
+            countdownDuration: 30 * 60,
+            phaseStartedAt: now.addingTimeInterval(-(10 * 60)),
+            scheduledEnd: now.addingTimeInterval(20 * 60),
+            remainingWhenPaused: nil,
+            lastModifiedAt: now.addingTimeInterval(-(10 * 60)),
+            completedAt: nil,
+            reminderLeadMinutes: 5
+        )
+
+        let paused = CycleTimerEngine.pause(running, now: now)
+        let resumeTime = now.addingTimeInterval(90)
+        let resumed = CycleTimerEngine.resume(paused, now: resumeTime)
+
+        #expect(paused.status == .paused)
+        #expect(paused.remainingWhenPaused == TimeInterval(20 * 60))
+        #expect(paused.scheduledEnd == nil)
+        #expect(resumed.status == .running)
+        #expect(resumed.phaseStartedAt == resumeTime)
+        #expect(resumed.scheduledEnd == resumeTime.addingTimeInterval(20 * 60))
+        #expect(resumed.remainingWhenPaused == nil)
+    }
+
+    @Test func addTimeExtendsPausedAndSnoozedSnapshotsDifferently() {
+        let now = Date(timeIntervalSinceReferenceDate: 3_000)
+        let paused = ActiveCycleSnapshot(
+            id: UUID(),
+            kind: .washer,
+            status: .paused,
+            configuredDuration: 40 * 60,
+            countdownDuration: 15 * 60,
+            phaseStartedAt: now.addingTimeInterval(-(25 * 60)),
+            scheduledEnd: nil,
+            remainingWhenPaused: 15 * 60,
+            lastModifiedAt: now,
+            completedAt: nil,
+            reminderLeadMinutes: 5
+        )
+        let snoozed = ActiveCycleSnapshot(
+            id: UUID(),
+            kind: .dryer,
+            status: .snoozed,
+            configuredDuration: 60 * 60,
+            countdownDuration: 5 * 60,
+            phaseStartedAt: now,
+            scheduledEnd: now.addingTimeInterval(5 * 60),
+            remainingWhenPaused: nil,
+            lastModifiedAt: now,
+            completedAt: nil,
+            reminderLeadMinutes: 5
+        )
+
+        let pausedUpdated = CycleTimerEngine.addTime(paused, minutes: 5, now: now)
+        let snoozedUpdated = CycleTimerEngine.addTime(snoozed, minutes: 5, now: now)
+
+        #expect(pausedUpdated.configuredDuration == 45 * 60)
+        #expect(pausedUpdated.countdownDuration == 20 * 60)
+        #expect(pausedUpdated.remainingWhenPaused == TimeInterval(20 * 60))
+        #expect(snoozedUpdated.configuredDuration == 65 * 60)
+        #expect(snoozedUpdated.countdownDuration == 10 * 60)
+        #expect(snoozedUpdated.scheduledEnd == now.addingTimeInterval(10 * 60))
+    }
+
+    @Test func restartPreservesKindAndReminderLeadWhileResettingTimer() {
+        let now = Date(timeIntervalSinceReferenceDate: 4_000)
+        let snapshot = ActiveCycleSnapshot(
+            id: UUID(),
+            kind: .dryer,
+            status: .completed,
+            configuredDuration: 47 * 60,
+            countdownDuration: 5 * 60,
+            phaseStartedAt: now.addingTimeInterval(-(50 * 60)),
+            scheduledEnd: nil,
+            remainingWhenPaused: 0,
+            lastModifiedAt: now.addingTimeInterval(-(2 * 60)),
+            completedAt: now.addingTimeInterval(-(2 * 60)),
+            reminderLeadMinutes: 9
+        )
+
+        let restarted = CycleTimerEngine.restart(snapshot, now: now)
+
+        #expect(restarted.kind == .dryer)
+        #expect(restarted.status == .running)
+        #expect(restarted.phaseStartedAt == now)
+        #expect(restarted.scheduledEnd == now.addingTimeInterval(47 * 60))
+        #expect(restarted.countdownDuration == 47 * 60)
+        #expect(restarted.reminderLeadMinutes == 9)
+    }
+
+    @Test func activeSnapshotReminderAndCompletionLabelsUseExpectedFormatting() {
+        let now = Date(timeIntervalSinceReferenceDate: 5_000)
+        let running = ActiveCycleSnapshot(
+            id: UUID(),
+            kind: .washer,
+            status: .running,
+            configuredDuration: 30 * 60,
+            countdownDuration: 30 * 60,
+            phaseStartedAt: now,
+            scheduledEnd: now.addingTimeInterval(30 * 60),
+            remainingWhenPaused: nil,
+            lastModifiedAt: now,
+            completedAt: nil,
+            reminderLeadMinutes: 5
+        )
+        let completed = ActiveCycleSnapshot(
+            id: UUID(),
+            kind: .washer,
+            status: .completed,
+            configuredDuration: 30 * 60,
+            countdownDuration: 30 * 60,
+            phaseStartedAt: now.addingTimeInterval(-(35 * 60)),
+            scheduledEnd: nil,
+            remainingWhenPaused: 0,
+            lastModifiedAt: now,
+            completedAt: now.addingTimeInterval(-(90 * 60)),
+            reminderLeadMinutes: 5
+        )
+
+        #expect(running.nextReminderAt == now.addingTimeInterval(25 * 60))
+        #expect(completed.completedElapsedString(now: now) == "1 hr ago")
+    }
+
+    @Test func durationFormatterHandlesMinuteClockAndElapsedCases() {
+        let reference = Date(timeIntervalSince1970: 1_700_000_000)
+
+        #expect(DurationFormatter.minutesString(seconds: 125) == "02:05")
+        #expect(DurationFormatter.shortLabel(minutes: 45) == "45m")
+        #expect(DurationFormatter.elapsedString(since: reference.addingTimeInterval(-30), now: reference) == "just now")
+        #expect(DurationFormatter.elapsedString(since: reference.addingTimeInterval(-(12 * 60)), now: reference) == "12 min ago")
+        #expect(DurationFormatter.elapsedString(since: reference.addingTimeInterval(-(3 * 60 * 60)), now: reference) == "3 hr ago")
+        #expect(DurationFormatter.elapsedString(since: reference.addingTimeInterval(-(2 * 86_400)), now: reference) == "2 days ago")
+    }
+
     @MainActor
     private func makeCoordinator(stores: TestStores, scheduler: MockNotificationScheduler) -> CycleCoordinator {
         CycleCoordinator(

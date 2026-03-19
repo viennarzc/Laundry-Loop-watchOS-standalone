@@ -33,29 +33,23 @@ struct LaundryLoopNew_Watch_AppApp: App {
 
 @MainActor
 final class NotificationResponseRouter: NSObject, ObservableObject, UNUserNotificationCenterDelegate {
-    private let handleAction: @Sendable (String) async -> Void
-    private let configureNotifications: @Sendable () async -> Void
+    private let coordinator: CycleCoordinator
 
     init(coordinator: CycleCoordinator) {
-        self.handleAction = { identifier in
-            await coordinator.handleNotificationAction(identifier: identifier)
-        }
-        self.configureNotifications = {
-            await coordinator.configureNotificationsOnLaunch()
-        }
+        self.coordinator = coordinator
         super.init()
     }
 
     func configure() {
         UNUserNotificationCenter.current().delegate = self
 
-        Task {
-            await configureNotifications()
+        Task { @MainActor in
+            await coordinator.configureNotificationsOnLaunch()
         }
     }
 
     func handleActionIdentifier(_ identifier: String) async {
-        await handleAction(identifier)
+        await coordinator.handleNotificationAction(identifier: identifier)
     }
 
     nonisolated func userNotificationCenter(
@@ -63,8 +57,8 @@ final class NotificationResponseRouter: NSObject, ObservableObject, UNUserNotifi
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void
     ) {
-        Task {
-            await handleAction(response.actionIdentifier)
+        Task { @MainActor [coordinator] in
+            await coordinator.handleNotificationAction(identifier: response.actionIdentifier)
             completionHandler()
         }
     }
