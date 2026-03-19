@@ -7,7 +7,8 @@ struct CustomDurationSheet: View {
     @State private var cycleKind: CycleKind
     @State private var durationMinutes: Int
 
-    private let minuteOptions = Array(stride(from: 15, through: 120, by: 5))
+    private let minuteOptions = Array(AppConstants.durationMinutesRange)
+    private let pickerHeight: CGFloat = 78
 
     init(coordinator: CycleCoordinator) {
         self.coordinator = coordinator
@@ -17,33 +18,63 @@ struct CustomDurationSheet: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                Picker("Cycle", selection: $cycleKind) {
-                    ForEach(CycleKind.allCases) { kind in
-                        Text(kind.title).tag(kind)
+            ScrollView {
+                VStack(spacing: 14) {
+                    pickerCard(title: "Cycle") {
+                        Picker("Cycle", selection: $cycleKind) {
+                            ForEach(CycleKind.allCases) { kind in
+                                Text(kind.title).tag(kind)
+                            }
+                        }
+                        .labelsHidden()
+                        .pickerStyle(.wheel)
+                        .frame(height: pickerHeight)
+                        .clipped()
+                        .onChange(of: cycleKind) { newKind in
+                            durationMinutes = defaultMinutes(for: newKind)
+                        }
                     }
-                }
-                .onChange(of: cycleKind) { newKind in
-                    durationMinutes = defaultMinutes(for: newKind)
-                }
 
-                Picker("Duration", selection: $durationMinutes) {
-                    ForEach(minuteOptions, id: \.self) { minute in
-                        Text("\(minute) min").tag(minute)
+                    pickerCard(title: "Duration") {
+                        Picker("Duration", selection: $durationMinutes) {
+                            ForEach(minuteOptions, id: \.self) { minute in
+                                Text("\(minute) min").tag(minute)
+                            }
+                        }
+                        .labelsHidden()
+                        .pickerStyle(.wheel)
+                        .frame(height: pickerHeight)
+                        .clipped()
                     }
-                }
-            }
-            .navigationTitle("Custom Time")
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
+
                     Button("Start") {
                         Task {
                             await coordinator.startCycle(kind: cycleKind, minutes: durationMinutes)
                             dismiss()
                         }
                     }
+                    .buttonStyle(.borderedProminent)
+                    .frame(maxWidth: .infinity, alignment: .center)
                 }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
             }
+            .navigationTitle("Custom Time")
+        }
+    }
+
+    @ViewBuilder
+    private func pickerCard<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .padding(.horizontal, 4)
+
+            content()
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 6)
+                .background(.thinMaterial, in: RoundedRectangle(cornerRadius: DesignTokens.cardCornerRadius, style: .continuous))
         }
     }
 

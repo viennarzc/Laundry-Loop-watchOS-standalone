@@ -27,15 +27,15 @@ struct SettingsView: View {
                 title: "Washer default",
                 value: "\(coordinator.settings.defaultWasherMinutes) min",
                 keyPath: \.defaultWasherMinutes,
-                range: 15...120,
-                step: 5
+                range: AppConstants.durationMinutesRange,
+                step: 1
             )
             settingStepperRow(
                 title: "Dryer default",
                 value: "\(coordinator.settings.defaultDryerMinutes) min",
                 keyPath: \.defaultDryerMinutes,
-                range: 15...120,
-                step: 5
+                range: AppConstants.durationMinutesRange,
+                step: 1
             )
         }
     }

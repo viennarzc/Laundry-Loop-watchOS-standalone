@@ -2,6 +2,7 @@ import Foundation
 
 enum AppConstants {
     static let appGroupIdentifier = "group.me.vnnz.LaundryLoop"
+    static let durationMinutesRange = 15...120
     static let notificationWasherCompletionCategoryIdentifier = "laundry-loop.cycle-actions.washer-complete"
     static let notificationDryerCompletionCategoryIdentifier = "laundry-loop.cycle-actions.dryer-complete"
     static let notificationPrefinishReminderCategoryIdentifier = "laundry-loop.cycle-actions.prefinish"
