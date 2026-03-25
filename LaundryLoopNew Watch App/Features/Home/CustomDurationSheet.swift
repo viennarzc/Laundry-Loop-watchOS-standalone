@@ -8,7 +8,9 @@ struct CustomDurationSheet: View {
     @State private var durationMinutes: Int
 
     private let minuteOptions = Array(AppConstants.durationMinutesRange)
-    private let pickerHeight: CGFloat = 78
+    private let pickerHeight: CGFloat = 92
+    private let pickerHorizontalInset: CGFloat = 22
+    private let pickerVerticalInset: CGFloat = 6
 
     init(coordinator: CycleCoordinator) {
         self.coordinator = coordinator
@@ -29,6 +31,7 @@ struct CustomDurationSheet: View {
                         .labelsHidden()
                         .pickerStyle(.wheel)
                         .frame(height: pickerHeight)
+                        .padding(.vertical, pickerVerticalInset)
                         .clipped()
                         .onChange(of: cycleKind) { newKind in
                             durationMinutes = defaultMinutes(for: newKind)
@@ -44,6 +47,7 @@ struct CustomDurationSheet: View {
                         .labelsHidden()
                         .pickerStyle(.wheel)
                         .frame(height: pickerHeight)
+                        .padding(.vertical, pickerVerticalInset)
                         .clipped()
                     }
 
@@ -73,7 +77,7 @@ struct CustomDurationSheet: View {
 
             content()
                 .frame(maxWidth: .infinity)
-                .padding(.horizontal, 6)
+                .padding(.horizontal, pickerHorizontalInset)
                 .background(.thinMaterial, in: RoundedRectangle(cornerRadius: DesignTokens.cardCornerRadius, style: .continuous))
         }
     }
