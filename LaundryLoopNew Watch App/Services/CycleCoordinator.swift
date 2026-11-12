@@ -81,6 +81,9 @@ final class CycleCoordinator: ObservableObject {
 
         _ = await notificationScheduler.requestAuthorizationIfNeeded()
         notificationStatus = await notificationScheduler.authorizationStatus()
+        // The user may have finished, paused, or replaced this cycle while the
+        // system permission prompt was open.
+        guard snapshot == newSnapshot else { return }
         await notificationScheduler.scheduleNotifications(for: newSnapshot, settings: settings)
         WidgetCenter.shared.reloadAllTimelines()
     }
@@ -179,10 +182,9 @@ final class CycleCoordinator: ObservableObject {
         case .paused:
             return "Paused"
         case .completed:
-            if let completedLabel = snapshot.completedElapsedString() {
-                return "Finished \(completedLabel)"
-            }
-            return "Laundry done"
+            return "Completed"
+        case .overdue:
+            return "Overdue"
         case .snoozed:
             return "Snoozed"
         case .idle:

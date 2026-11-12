@@ -37,6 +37,19 @@ struct LaundryLoopProvider: TimelineProvider {
             )
         }
 
+        let completionDate = snapshot.displayEndDate ?? snapshot.completedAt
+        if let completionDate, snapshot.status != .overdue {
+            let overdueDate = completionDate.addingTimeInterval(15 * 60)
+            if overdueDate > now {
+                entries.append(
+                    LaundryLoopEntry(
+                        date: overdueDate,
+                        snapshot: WidgetSnapshotStore.normalized(snapshot, now: overdueDate)
+                    )
+                )
+            }
+        }
+
         return entries
     }
 }
@@ -131,11 +144,11 @@ private extension LaundryLoopWidgetView {
                 reminderLeadMinutes: 5
             )
 
-        case .completed:
+        case .completed, .overdue:
             return WidgetCycleSnapshot(
                 id: UUID(),
                 kind: kind,
-                status: .completed,
+                status: status,
                 configuredDuration: 45 * 60,
                 countdownDuration: 45 * 60,
                 phaseStartedAt: now.addingTimeInterval(-45 * 60),

@@ -15,7 +15,8 @@ final class SettingsStore: SettingsStoring {
                 defaultWasherMinutes: record.defaultWasherMinutes,
                 defaultDryerMinutes: record.defaultDryerMinutes,
                 reminderLeadMinutes: record.reminderLeadMinutes,
-                hapticsEnabled: record.hapticsEnabled
+                hapticsEnabled: record.hapticsEnabled,
+                reminderProfile: ReminderProfile(rawValue: record.reminderProfileRawValue) ?? .persistent
             )
         }
 
@@ -37,6 +38,7 @@ final class SettingsStore: SettingsStoring {
         record.defaultDryerMinutes = settings.defaultDryerMinutes
         record.reminderLeadMinutes = settings.reminderLeadMinutes
         record.hapticsEnabled = settings.hapticsEnabled
+        record.reminderProfileRawValue = settings.reminderProfile.rawValue
         try modelContext.save()
     }
 }

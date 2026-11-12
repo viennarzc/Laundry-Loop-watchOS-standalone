@@ -20,6 +20,8 @@ final class LaundryLoopNew_Watch_AppUITestsLaunchTests: XCTestCase {
     @MainActor
     func testLaunch() throws {
         let app = XCUIApplication()
+        app.launchEnvironment["LAUNDRY_LOOP_UI_TEST_ID"] = UUID().uuidString
+        app.launchArguments = ["--uitesting", "--uitesting-reset"]
         app.launch()
 
         // Insert steps here to perform after app launch but before taking a screenshot,

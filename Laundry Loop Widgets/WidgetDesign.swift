@@ -80,11 +80,8 @@ struct WidgetPrimaryStatusValue: View {
                         .fontWeight(.semibold)
                 }
 
-            case .completed:
+            case .completed, .overdue:
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Finished")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
                     Text(snapshot.completedDisplayLabel)
                         .font(.callout)
                         .fontWeight(.semibold)
@@ -194,6 +191,17 @@ struct WidgetAccessoryCircularContent: View {
             }
             .multilineTextAlignment(.center)
 
+        case .overdue:
+            VStack(spacing: 2) {
+                Image(systemName: snapshot.kind.symbolName)
+                    .font(.caption)
+                Text("Overdue")
+                    .font(.system(size: 9, weight: .semibold, design: .rounded))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+            }
+            .multilineTextAlignment(.center)
+
         case .idle:
             Image(systemName: "timer")
                 .font(.title3)
@@ -249,6 +257,9 @@ struct WidgetAccessoryInlineContent: View {
 
         case .completed:
             return Text("\(snapshot.kind.title) done ") + Text(snapshot.completedCompactLabel)
+
+        case .overdue:
+            return Text("\(snapshot.kind.title) Overdue")
 
         case .idle:
             return Text("No active cycle")

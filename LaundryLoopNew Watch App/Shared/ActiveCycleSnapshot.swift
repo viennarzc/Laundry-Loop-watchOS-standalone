@@ -14,7 +14,7 @@ struct ActiveCycleSnapshot: Codable, Equatable, Sendable, Identifiable {
     var reminderLeadMinutes: Int
 
     var isActive: Bool {
-        status == .running || status == .paused || status == .snoozed || status == .completed
+        status == .running || status == .paused || status == .snoozed || status.isAwaitingAction
     }
 
     var nextReminderAt: Date? {
@@ -25,7 +25,7 @@ struct ActiveCycleSnapshot: Codable, Equatable, Sendable, Identifiable {
     }
 
     func completedElapsedString(now: Date = .now) -> String? {
-        guard status == .completed, let completedAt else {
+        guard status.isAwaitingAction, let completedAt else {
             return nil
         }
         return DurationFormatter.elapsedString(since: completedAt, now: now)

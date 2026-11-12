@@ -42,6 +42,19 @@ struct SettingsView: View {
 
     private var reminderSection: some View {
         settingsGroup(title: "Reminders") {
+            Picker("Reminder profile", selection: binding(\.reminderProfile)) {
+                ForEach(ReminderProfile.allCases) { profile in
+                    Text(profile.title).tag(profile)
+                }
+            }
+            .pickerStyle(.navigationLink)
+            .accessibilityIdentifier("reminder-profile-picker")
+
+            Text(reminderExplanation)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
             let reminderValue = coordinator.settings.reminderLeadMinutes == 0
                 ? "Off"
                 : "\(coordinator.settings.reminderLeadMinutes) min"
@@ -53,6 +66,18 @@ struct SettingsView: View {
                 range: 0...15,
                 step: 5
             )
+            .disabled(!coordinator.settings.reminderProfile.includesPrefinish)
+        }
+    }
+
+    private var reminderExplanation: String {
+        guard coordinator.settings.reminderLeadMinutes == 0 else {
+            return coordinator.settings.reminderProfile.explanation
+        }
+        switch coordinator.settings.reminderProfile {
+        case .gentle: return "Completion alert only."
+        case .standard: return "At completion and 15 minutes later."
+        case .persistent: return "At completion and 15, 45, and 105 minutes later."
         }
     }
 
@@ -67,7 +92,6 @@ struct SettingsView: View {
             Text(notificationCopy)
                 .font(.caption2)
                 .foregroundStyle(.secondary)
-                .lineLimit(3)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(12)
                 .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
@@ -124,7 +148,7 @@ struct SettingsView: View {
     private var notificationCopy: String {
         switch coordinator.notificationStatus {
         case .authorized, .provisional, .ephemeral:
-            return "Notifications are enabled. Laundry Loop will nudge you when a cycle is nearly done or finished."
+            return "Notifications are enabled. Laundry Loop can send cycle reminders."
         case .denied:
             return "Notifications are turned off for Laundry Loop. Enable them in Apple Watch settings if you want completion reminders."
         case .notDetermined:

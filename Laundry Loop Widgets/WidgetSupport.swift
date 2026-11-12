@@ -3,6 +3,7 @@ import Foundation
 private enum WidgetConstants {
     static let appGroupIdentifier = "group.me.vnnz.LaundryLoop"
     static let snapshotDefaultsKey = "activeCycleSnapshot"
+    static let overdueThreshold: TimeInterval = 15 * 60
 }
 
 enum WidgetCycleKind: String, Codable {
@@ -29,6 +30,7 @@ enum WidgetCycleStatus: String, Codable {
     case running
     case paused
     case completed
+    case overdue
     case snoozed
 }
 
@@ -63,25 +65,22 @@ struct WidgetCycleSnapshot: Codable, Equatable {
         switch status {
         case .running: return "Running"
         case .paused: return "Paused"
-        case .completed:
-            if let completedAt {
-                return "Finished \(WidgetSnapshotStore.elapsedString(since: completedAt))"
-            }
-            return "Done"
+        case .completed: return "Completed"
+        case .overdue: return "Overdue"
         case .snoozed: return "Snoozed"
         case .idle: return "Idle"
         }
     }
 
     var completedDisplayLabel: String {
-        guard status == .completed, let completedAt else {
+        guard (status == .completed || status == .overdue), let completedAt else {
             return "Laundry done"
         }
         return "Finished \(WidgetSnapshotStore.elapsedString(since: completedAt))"
     }
 
     var completedCompactLabel: String {
-        guard status == .completed, let completedAt else {
+        guard (status == .completed || status == .overdue), let completedAt else {
             return "Done"
         }
         return WidgetSnapshotStore.compactElapsedString(since: completedAt)
@@ -117,7 +116,7 @@ enum WidgetSnapshotStore {
         switch snapshot.status {
         case .paused:
             return max(snapshot.remainingWhenPaused ?? snapshot.countdownDuration, 0)
-        case .completed:
+        case .completed, .overdue:
             return 0
         case .running, .snoozed:
             return max((snapshot.scheduledEnd ?? now).timeIntervalSince(now), 0)
@@ -132,15 +131,21 @@ enum WidgetSnapshotStore {
     ///   - now: The current date, defaults to `.now`.
     /// - Returns: The normalized `WidgetCycleSnapshot`.
     static func normalized(_ snapshot: WidgetCycleSnapshot, now: Date = .now) -> WidgetCycleSnapshot {
-        guard snapshot.status == .running || snapshot.status == .snoozed else { return snapshot }
-        guard let end = snapshot.scheduledEnd, end <= now else { return snapshot }
-        var completed = snapshot
-        completed.status = .completed
-        completed.completedAt = end
-        completed.scheduledEnd = nil
-        completed.remainingWhenPaused = 0
-        completed.lastModifiedAt = now
-        return completed
+        var normalized = snapshot
+        if (snapshot.status == .running || snapshot.status == .snoozed),
+           let end = snapshot.scheduledEnd, end <= now {
+            normalized.status = .completed
+            normalized.completedAt = end
+            normalized.scheduledEnd = nil
+            normalized.remainingWhenPaused = 0
+            normalized.lastModifiedAt = now
+        }
+        if normalized.status == .completed, let completedAt = normalized.completedAt,
+           now >= completedAt.addingTimeInterval(WidgetConstants.overdueThreshold) {
+            normalized.status = .overdue
+            normalized.lastModifiedAt = now
+        }
+        return normalized
     }
 
     /// Formats a `TimeInterval` into a human-readable duration string (MM:SS).
