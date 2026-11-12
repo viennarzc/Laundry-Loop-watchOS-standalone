@@ -16,8 +16,8 @@ struct ActiveCycleView: View {
             ScrollView {
                 VStack(spacing: DesignTokens.sectionSpacing) {
                     heroCard(for: normalized, remaining: remaining, progress: progress)
-                    infoRow(for: normalized, now: context.date, elapsed: elapsed, total: normalized.configuredDuration)
                     actionSection(for: normalized)
+                    infoRow(for: normalized, now: context.date, elapsed: elapsed, total: normalized.configuredDuration)
                 }
                 .padding(.vertical, 8)
                 .padding(.horizontal)
@@ -61,12 +61,23 @@ struct ActiveCycleView: View {
                     .stroke(DesignTokens.tint(for: snapshot.kind), style: StrokeStyle(lineWidth: 6, lineCap: .round))
                     .rotationEffect(.degrees(-90))
                 VStack(spacing: 4) {
-                    Text(DurationFormatter.minutesString(seconds: remaining))
-                        .font(.system(.largeTitle, design: .rounded).monospacedDigit())
-                        .fontWeight(.semibold)
-                    Text("Time remaining")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
+                    if snapshot.status.isAwaitingAction {
+                        Text(snapshot.status.title)
+                            .font(.headline)
+                            .accessibilityIdentifier("cycle-status")
+                        if let elapsed = snapshot.completedElapsedString() {
+                            Text("Finished \(elapsed)")
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
+                    } else {
+                        Text(DurationFormatter.minutesString(seconds: remaining))
+                            .font(.system(.largeTitle, design: .rounded).monospacedDigit())
+                            .fontWeight(.semibold)
+                        Text("Time remaining")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                    }
                 }
             }
             .frame(width: 120, height: 120)
@@ -86,19 +97,23 @@ struct ActiveCycleView: View {
 
     private func infoRow(for snapshot: ActiveCycleSnapshot, now: Date, elapsed: TimeInterval, total: TimeInterval) -> some View {
         VStack(alignment: .leading, spacing: DesignTokens.infoSpacing) {
-            if snapshot.status == .completed, let completedLabel = snapshot.completedElapsedString(now: now) {
+            if snapshot.status.isAwaitingAction, let completedLabel = snapshot.completedElapsedString(now: now) {
                 infoItem(
                     title: "Finished",
                     value: completedLabel
                 )
-            } else if let reminder = snapshot.nextReminderAt {
+            } else if coordinator.notificationStatus == .authorized,
+                      coordinator.settings.reminderProfile.includesPrefinish,
+                      let end = snapshot.scheduledEnd,
+                      coordinator.settings.reminderLeadMinutes > 0,
+                      end.addingTimeInterval(-TimeInterval(coordinator.settings.reminderLeadMinutes * 60)) > now {
                 infoItem(
                     title: "Next reminder",
-                    value: DurationFormatter.clockString(for: reminder)
+                    value: DurationFormatter.clockString(for: end.addingTimeInterval(-TimeInterval(coordinator.settings.reminderLeadMinutes * 60)))
                 )
             }
 
-            if snapshot.status != .completed {
+            if !snapshot.status.isAwaitingAction {
                 infoItem(
                     title: "Elapsed",
                     value: DurationFormatter.minutesString(seconds: elapsed)
@@ -128,8 +143,8 @@ struct ActiveCycleView: View {
 
     private func actionSection(for snapshot: ActiveCycleSnapshot) -> some View {
         VStack(spacing: 12) {
-            if snapshot.status == .completed {
-                completedActions
+            if snapshot.status.isAwaitingAction {
+                completedActions(for: snapshot)
             } else {
                 runningActions
             }
@@ -167,14 +182,16 @@ struct ActiveCycleView: View {
         }
     }
 
-    private var completedActions: some View {
+    private func completedActions(for snapshot: ActiveCycleSnapshot) -> some View {
         VStack(spacing: 10) {
-            Button("Start Dryer") {
-                Task { await coordinator.startDefaultCycle(kind: .dryer) }
+            if snapshot.kind == .washer {
+                Button("Start Dryer") {
+                    Task { await coordinator.startDefaultCycle(kind: .dryer) }
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.orange)
+                .accessibilityIdentifier("start-dryer-complete-button")
             }
-            .buttonStyle(.borderedProminent)
-            .tint(.orange)
-            .accessibilityIdentifier("start-dryer-complete-button")
 
             Button("Snooze 5 min") {
                 Task { await coordinator.snoozeFiveMinutes() }

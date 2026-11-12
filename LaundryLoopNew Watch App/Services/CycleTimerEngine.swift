@@ -22,7 +22,7 @@ enum CycleTimerEngine {
         switch snapshot.status {
         case .paused:
             return max(snapshot.remainingWhenPaused ?? snapshot.countdownDuration, 0)
-        case .completed:
+        case .completed, .overdue:
             return 0
         case .running, .snoozed:
             return max((snapshot.scheduledEnd ?? now).timeIntervalSince(now), 0)
@@ -39,16 +39,20 @@ enum CycleTimerEngine {
     }
 
     static func normalize(_ snapshot: ActiveCycleSnapshot, now: Date = .now) -> ActiveCycleSnapshot {
-        guard snapshot.status.isCountdownActive else { return snapshot }
-        guard let scheduledEnd = snapshot.scheduledEnd, scheduledEnd <= now else { return snapshot }
-
-        var completed = snapshot
-        completed.status = .completed
-        completed.completedAt = scheduledEnd
-        completed.scheduledEnd = nil
-        completed.remainingWhenPaused = 0
-        completed.lastModifiedAt = now
-        return completed
+        var normalized = snapshot
+        if snapshot.status.isCountdownActive, let end = snapshot.scheduledEnd, end <= now {
+            normalized.status = .completed
+            normalized.completedAt = end
+            normalized.scheduledEnd = nil
+            normalized.remainingWhenPaused = 0
+            normalized.lastModifiedAt = now
+        }
+        if normalized.status == .completed, let completedAt = normalized.completedAt,
+           now >= completedAt.addingTimeInterval(AppConstants.overdueThreshold) {
+            normalized.status = .overdue
+            normalized.lastModifiedAt = now
+        }
+        return normalized
     }
 
     static func pause(_ snapshot: ActiveCycleSnapshot, now: Date = .now) -> ActiveCycleSnapshot {
@@ -83,7 +87,7 @@ enum CycleTimerEngine {
         case .running, .snoozed:
             let currentEnd = updated.scheduledEnd ?? now
             updated.scheduledEnd = currentEnd.addingTimeInterval(extra)
-        case .completed, .idle:
+        case .completed, .overdue, .idle:
             break
         }
         updated.lastModifiedAt = now

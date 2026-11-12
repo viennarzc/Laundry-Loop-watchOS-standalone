@@ -3,11 +3,8 @@ import UserNotifications
 
 final class NotificationScheduler: NotificationScheduling, @unchecked Sendable {
     private let center: UserNotificationCentering
-    private let overdueReminderOffsets: [TimeInterval] = [
-        15 * 60,
-        45 * 60,
-        105 * 60,
-    ]
+    private let operationLock = NSLock()
+    private var previousOperation: Task<Void, Never>?
 
     init(center: UserNotificationCentering = UNUserNotificationCenter.current()) {
         self.center = center
@@ -69,7 +66,19 @@ final class NotificationScheduler: NotificationScheduling, @unchecked Sendable {
     }
 
     func scheduleNotifications(for snapshot: ActiveCycleSnapshot, settings: AppSettings) async {
+        let operation = enqueue { [self] in
+            await performSchedule(for: snapshot, settings: settings)
+        }
+        await operation.value
+    }
+
+    private func performSchedule(for snapshot: ActiveCycleSnapshot, settings: AppSettings) async {
         await clearPendingNotifications()
+        let authorization = await center.authorizationStatus()
+        switch authorization {
+        case .authorized, .provisional, .ephemeral: break
+        default: return
+        }
 
         switch snapshot.status {
         case .running, .snoozed:
@@ -90,7 +99,7 @@ final class NotificationScheduler: NotificationScheduling, @unchecked Sendable {
             try? await center.add(completionRequest)
 
             let reminderLead = TimeInterval(settings.reminderLeadMinutes * 60)
-            if reminderLead > 0, completionInterval > reminderLead {
+            if settings.reminderProfile.includesPrefinish, reminderLead > 0, completionInterval > reminderLead {
                 let reminderContent = UNMutableNotificationContent()
                 reminderContent.title = "\(snapshot.kind.title) almost done"
                 reminderContent.body = "\(settings.reminderLeadMinutes) minutes left."
@@ -104,11 +113,11 @@ final class NotificationScheduler: NotificationScheduling, @unchecked Sendable {
                 try? await center.add(reminderRequest)
             }
 
-            await scheduleOverdueReminders(kind: snapshot.kind, completedAt: scheduledEnd)
+            await scheduleOverdueReminders(kind: snapshot.kind, completedAt: scheduledEnd, profile: settings.reminderProfile)
 
-        case .completed:
+        case .completed, .overdue:
             guard let completedAt = snapshot.completedAt else { return }
-            await scheduleOverdueReminders(kind: snapshot.kind, completedAt: completedAt)
+            await scheduleOverdueReminders(kind: snapshot.kind, completedAt: completedAt, profile: settings.reminderProfile)
 
         case .paused, .idle:
             break
@@ -116,13 +125,16 @@ final class NotificationScheduler: NotificationScheduling, @unchecked Sendable {
     }
 
     func cancelScheduledNotifications() async {
-        let identifiers = allNotificationIdentifiers
-        center.removePendingNotificationRequests(withIdentifiers: identifiers)
-        center.removeDeliveredNotifications(withIdentifiers: identifiers)
+        let operation = enqueue { [self] in
+            let identifiers = allNotificationIdentifiers
+            center.removePendingNotificationRequests(withIdentifiers: identifiers)
+            center.removeDeliveredNotifications(withIdentifiers: identifiers)
+        }
+        await operation.value
     }
 
-    private func scheduleOverdueReminders(kind: CycleKind, completedAt: Date) async {
-        for offset in overdueReminderOffsets {
+    private func scheduleOverdueReminders(kind: CycleKind, completedAt: Date, profile: ReminderProfile) async {
+        for offset in profile.overdueOffsets {
             let fireDate = completedAt.addingTimeInterval(offset)
             let interval = fireDate.timeIntervalSinceNow
             guard interval > 0 else { continue }
@@ -169,11 +181,23 @@ final class NotificationScheduler: NotificationScheduling, @unchecked Sendable {
             AppConstants.notificationWasherCompletionIdentifier,
             AppConstants.notificationDryerCompletionIdentifier,
             AppConstants.notificationPrefinishReminderIdentifier,
-        ] + overdueReminderOffsets.map(overdueReminderIdentifier(for:))
+        ] + ReminderProfile.persistent.overdueOffsets.map(overdueReminderIdentifier(for:))
     }
 
     private func clearPendingNotifications() async {
         center.removePendingNotificationRequests(withIdentifiers: allNotificationIdentifiers)
+    }
+
+    private func enqueue(_ action: @escaping @Sendable () async -> Void) -> Task<Void, Never> {
+        operationLock.lock()
+        defer { operationLock.unlock() }
+        let previous = previousOperation
+        let operation = Task {
+            await previous?.value
+            await action()
+        }
+        previousOperation = operation
+        return operation
     }
 }
 

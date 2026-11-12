@@ -88,6 +88,13 @@
 			);
 			target = 853AE8FD2F5BCF86000F539A /* Laundry Loop WidgetsExtension */;
 		};
+		85EE8F2630A5800000FFFFFF /* Exceptions for "Laundry Loop Widgets" folder in "LaundryLoopNew Watch AppTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				WidgetSupport.swift,
+			);
+			target = 853AE8242F5BCE5E000F539A /* LaundryLoopNew Watch AppTests */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -109,6 +116,7 @@
 		853AE9042F5BCF86000F539A /* Laundry Loop Widgets */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				85EE8F2630A5800000FFFFFF /* Exceptions for "Laundry Loop Widgets" folder in "LaundryLoopNew Watch AppTests" target */,
 				853AE90F2F5BCF86000F539A /* Exceptions for "Laundry Loop Widgets" folder in "Laundry Loop WidgetsExtension" target */,
 			);
 			path = "Laundry Loop Widgets";

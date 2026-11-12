@@ -63,6 +63,16 @@
                ReferencedContainer = "container:LaundryLoopNew.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "853AE82E2F5BCE5E000F539A"
+               BuildableName = "LaundryLoopNew Watch AppUITests.xctest"
+               BlueprintName = "LaundryLoopNew Watch AppUITests"
+               ReferencedContainer = "container:LaundryLoopNew.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
